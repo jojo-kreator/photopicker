@@ -52,7 +52,7 @@ function createWindow() {
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
 }
 
-const wrap = (fn) => async (...a) => {
+   const wrap = (fn) => async (_event, ...a) => {
   try { return { ok: true, data: await fn(...a) }; }
   catch (e) { return { ok: false, error: e.message || String(e) }; }
 };
@@ -100,7 +100,7 @@ ipcMain.handle('download', wrap(async ({ files, destDir }) => {
 }));
 
 ipcMain.handle('cancel', wrap(async () => { if (abort) abort.abort(); return true; }));
-ipcMain.handle('openFolder', wrap(async (_e, p) => { await shell.openPath(p); return true; }));
+   ipcMain.handle('openFolder', wrap(async (p) => { await shell.openPath(p); return true; }));
 
 app.whenReady().then(createWindow);
 app.on('window-all-closed', () => app.quit());

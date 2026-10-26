@@ -5,8 +5,8 @@ window.PP = {
   repo: "jojo-kreator/photopicker",
 
   // Shown in the privacy policy and in the early-access notice.
-  contact: "you@example.com",
-  developer: "Your Name or Studio Name",
+  contact: "odukaiyej@gmail.com",
+  developer: "Joshua Odukaiye",
 
   // true  = show the "early access" notice and the "Google hasn't verified this app" help.
   // false = hide them (set this after Google has verified your app).

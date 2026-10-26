@@ -52,7 +52,8 @@ function createWindow() {
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
 }
 
-   const wrap = (fn) => async (_event, ...a) => {
+// ipcMain.handle calls handlers as (event, payload); drop the event so handlers get only the payload.
+const wrap = (fn) => async (_event, ...a) => {
   try { return { ok: true, data: await fn(...a) }; }
   catch (e) { return { ok: false, error: e.message || String(e) }; }
 };
@@ -73,6 +74,7 @@ ipcMain.handle('scan', wrap(async ({ folder, names, refresh }) => {
   const m = matchNames(cachedFiles, list);
   return {
     totalInFolder: cachedFiles.length,
+    sample: cachedFiles.slice(0, 6).map((f) => f.name),
     requested: list.length,
     results: m.results,
     foundCount: m.found.length,
@@ -100,7 +102,7 @@ ipcMain.handle('download', wrap(async ({ files, destDir }) => {
 }));
 
 ipcMain.handle('cancel', wrap(async () => { if (abort) abort.abort(); return true; }));
-   ipcMain.handle('openFolder', wrap(async (p) => { await shell.openPath(p); return true; }));
+ipcMain.handle('openFolder', wrap(async (p) => { await shell.openPath(p); return true; }));
 
 app.whenReady().then(createWindow);
 app.on('window-all-closed', () => app.quit());

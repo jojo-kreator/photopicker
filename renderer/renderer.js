@@ -61,7 +61,11 @@ $('findBtn').onclick = async () => {
     return;
   }
   lastScan = r.data;
-  $('scanStatus').textContent = `Folder has ${r.data.totalInFolder} files.`;
+  let status = `Folder has ${r.data.totalInFolder} files.`;
+  if (r.data.missingCount > 0 && r.data.sample && r.data.sample.length) {
+    status += ` Examples: ${r.data.sample.join(', ')}`;
+  }
+  $('scanStatus').textContent = status;
   renderResults(r.data);
 };
 
@@ -82,10 +86,10 @@ function renderResults(d) {
     const left = document.createElement('span');
     left.textContent = r.query;
     if (r.status === 'found') {
-      if (r.matchedBy === 'number') {
+      if (r.matchedBy === 'number' || r.matchedBy === 'partial') {
         const t = document.createElement('span');
         t.className = 'tag';
-        t.textContent = 'matched by number';
+        t.textContent = r.matchedBy === 'number' ? 'matched by number' : 'partial match, check';
         left.appendChild(t);
       }
       const right = document.createElement('span');

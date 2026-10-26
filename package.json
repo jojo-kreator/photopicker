@@ -1,0 +1,52 @@
+{
+  "name": "photopicker",
+  "productName": "PhotoPicker",
+  "version": "0.1.0",
+  "description": "Paste the client's selected file names, find them in a Google Drive shoot folder, and download them all at once.",
+  "author": "PhotoPicker",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/matcher.test.js test/drive.test.js",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.photopicker.app",
+    "productName": "PhotoPicker",
+    "copyright": "Copyright © 2026 PhotoPicker",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "lib/**",
+      "renderer/**",
+      "google-credentials.json",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.png",
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "artifactName": "PhotoPicker-Setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "deleteAppDataOnUninstall": true
+    },
+    "mac": {
+      "icon": "build/icon.png",
+      "category": "public.app-category.photography",
+      "target": [{ "target": "dmg", "arch": ["arm64", "x64"] }],
+      "artifactName": "PhotoPicker-mac-${arch}.${ext}"
+    }
+  }
+}
